@@ -22,14 +22,9 @@ class App extends Component {
   };
   handleSubmit = event => {
     const { url, token, room } = this.state;
-    //url
-    // wss://test.devpizzasoft.ru/socket.io/
-    //toket
-    //
-    //FullRoute
-    //${url}?token=${token}&client_id=8279e4f1-369e-11e9-adde-d3b1be18480a&room=
+    const CLIENT_ID = "1f057240-36b2-11e9-a428-03d9d209efc5";
     event.preventDefault();
-    const query = `${url}?token=${token}8279e4f1-369e-11e9-adde-d3b1be18480a&room=`;
+    const query = `${url}?token=${token}&client_id=${CLIENT_ID}&room=`;
     console.log(query);
     const socket = new WebSocket(query);
     socket.onopen = () => {
@@ -43,8 +38,10 @@ class App extends Component {
       }
       console.log("Код: " + event.code + " причина: " + event.reason);
     };
-    socket.onmessage = event => {
-      console.log("Получены данные " + event.data);
+    socket.onmessage = request => {
+      console.log("Получены данные " + request.data);
+      console.log(request.data[0]);
+
       this.showSocket();
     };
     socket.onerror = error => {
