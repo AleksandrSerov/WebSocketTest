@@ -1,18 +1,14 @@
 import React, { Component } from "react";
 import "./App.css";
+import SocketClient from "./service/socketClient";
 
 class App extends Component {
+  socket = new SocketClient();
   state = {
     url: "",
     token: "",
     room: ""
   };
-  componentDidMount() {}
-
-  componentDidUpdate() {
-    console.log(this.state);
-  }
-  showSocket = () => {};
 
   handleInput = event => {
     const { value, name } = event.target;
@@ -20,37 +16,20 @@ class App extends Component {
       [name]: value
     });
   };
+
   handleSubmit = event => {
-    const { url, token, room } = this.state;
-    //url
-    // wss://test.devpizzasoft.ru/socket.io/
-    //toket
-    //
-    //FullRoute
-    //${url}?token=${token}&client_id=8279e4f1-369e-11e9-adde-d3b1be18480a&room=
     event.preventDefault();
-    const query = `${url}?token=${token}8279e4f1-369e-11e9-adde-d3b1be18480a&room=`;
-    console.log(query);
-    const socket = new WebSocket(query);
-    socket.onopen = () => {
-      console.log("Connected");
-    };
-    socket.onclose = event => {
-      if (event.wasClean) {
-        console.log(`Соединение закрыто чисто. Код закрытия -  ${event.code}`);
-      } else {
-        console.log("Обрыв соединения");
-      }
-      console.log("Код: " + event.code + " причина: " + event.reason);
-    };
-    socket.onmessage = event => {
-      console.log("Получены данные " + event.data);
-      this.showSocket();
-    };
-    socket.onerror = error => {
-      console.log("Ошибка " + error.message);
-    };
+    const {
+      state: { token, room },
+      socket
+    } = this;
+
+    socket.open(token);
+    setTimeout(() => {
+      this.socket.join(`${room}`);
+    }, 15000);
   };
+
   render() {
     return (
       <div className="App">
@@ -59,12 +38,7 @@ class App extends Component {
           <div className="content-form">
             <form action="#">
               <label htmlFor="url">URL</label>
-              <input
-                onChange={this.handleInput}
-                id="url"
-                name="url"
-                value="wss://test.devpizzasoft.ru/socket.io/"
-              />
+              <input onChange={this.handleInput} id="url" name="url" />
 
               <label htmlFor="token">Token</label>
               <input onChange={this.handleInput} id="token" name="token" />
