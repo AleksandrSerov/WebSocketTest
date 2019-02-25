@@ -21,5 +21,9 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "qs": "^6.6.0",
+    "uuidv1": "^1.6.14"
+  }
 }

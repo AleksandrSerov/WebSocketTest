@@ -1,54 +1,95 @@
 import React, { Component } from "react";
 import "./App.css";
+import SocketClient from "./service/socketClient";
 
+import uuidv1 from "uuid/v1";
+import qs from "qs";
 class App extends Component {
+  constructor() {
+    super();
+    this.client_id = uuidv1();
+    this.url = "wss://test.devpizzasoft.ru/socket.io/";
+  }
+  // socket = new SocketClient();
   state = {
     url: "",
     token: "",
-    room: ""
+    room: "",
+    items: "",
+    sockets: "",
+    showList: true
   };
-  componentDidMount() {}
-
-  componentDidUpdate() {
-    console.log(this.state);
-  }
-  showSocket = () => {};
-
+  ping = () => {
+    this.socket.send(JSON.stringify({ type: "ping", data: "ping" }));
+  };
+  join = room => {
+    this.socket.send(JSON.stringify({ type: "join", room }));
+  };
   handleInput = event => {
     const { value, name } = event.target;
     this.setState({
       [name]: value
     });
   };
-  handleSubmit = event => {
-    const { url, token, room } = this.state;
-    const CLIENT_ID = "1f057240-36b2-11e9-a428-03d9d209efc5";
-    event.preventDefault();
-    const query = `${url}?token=${token}&client_id=${CLIENT_ID}&room=`;
-    console.log(query);
-    const socket = new WebSocket(query);
-    socket.onopen = () => {
-      console.log("Connected");
-    };
-    socket.onclose = event => {
-      if (event.wasClean) {
-        console.log(`Соединение закрыто чисто. Код закрытия -  ${event.code}`);
-      } else {
-        console.log("Обрыв соединения");
-      }
-      console.log("Код: " + event.code + " причина: " + event.reason);
-    };
-    socket.onmessage = request => {
-      console.log("Получены данные " + request.data);
-      console.log(request.data[0]);
 
-      this.showSocket();
+  handleSubmit = event => {
+    event.preventDefault();
+    const { token } = this.state;
+
+    const query = {
+      token,
+      client_id: this.client_id,
+      room: ""
     };
-    socket.onerror = error => {
-      console.log("Ошибка " + error.message);
+
+    this.socket = new WebSocket(`${this.url}?${qs.stringify(query)}`);
+
+    setTimeout(() => {
+      this.ping();
+      this.join(this.state.room);
+    }, 5000);
+
+    this.socket.onmessage = request => {
+      const message = JSON.parse(request.data);
+      if (message.room === this.state.room) {
+        this.setState({
+          sockets: [...this.state.sockets, message]
+        });
+      }
     };
   };
+
+  renderItems = arr => {
+    const items = arr.map((item, i) => {
+      return <li key={i}>{JSON.stringify(item.data)}</li>;
+    });
+    return (
+      <>
+        <span className="roomName">Room: {arr[0].room}</span>
+        {items}
+      </>
+    );
+  };
+  showList = () => {
+    this.setState({
+      showList: !this.state.showList
+    });
+  };
+
   render() {
+    const { sockets, showList } = this.state;
+    const items = sockets ? this.renderItems(sockets) : "";
+    const count = sockets.length;
+
+    const list = showList ? (
+      <ul onClick={this.showList} className="socketList list">
+        {items}
+      </ul>
+    ) : (
+      <ul onClick={this.showList} className="socketList list">
+        <span className="roomName">Room: {sockets[0].room}</span>
+      </ul>
+    );
     return (
       <div className="App">
         <h1>WebSocket App</h1>
@@ -56,12 +97,7 @@ class App extends Component {
           <div className="content-form">
             <form action="#">
               <label htmlFor="url">URL</label>
-              <input
-                onChange={this.handleInput}
-                id="url"
-                name="url"
-                value="wss://test.devpizzasoft.ru/socket.io/"
-              />
+              <input onChange={this.handleInput} id="url" name="url" />
 
               <label htmlFor="token">Token</label>
               <input onChange={this.handleInput} id="token" name="token" />
@@ -75,13 +111,8 @@ class App extends Component {
             </form>
           </div>
           <div className="socketList">
-            <div className="socketList-counter" />
-            <ul>
-              <li>socket 1</li>
-              <li>socket 1</li>
-              <li>socket 1</li>
-              <li>socket 1</li>
-            </ul>
+            <div className="socketList-counter">Count of sockets: {count}</div>
+            {list}
           </div>
         </div>
       </div>

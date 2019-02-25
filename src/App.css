@@ -35,3 +35,23 @@ h1 {
   border: none;
   outline: none;
 }
+ul {
+  cursor: pointer;
+}
+ul li {
+  list-style: decimal;
+}
+.roomName {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.socketList .list {
+  border: none;
+}
+
+.socketList-counter {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 10px;
+}
