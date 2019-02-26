@@ -21,6 +21,7 @@ class App extends Component {
     rooms: [],
     connect: false
   };
+  
   ping = () => {
     this.socket.send(JSON.stringify({ type: "ping", data: "ping" }));
   };
@@ -49,7 +50,6 @@ class App extends Component {
       client_id: this.client_id,
       room: ""
     };
-
     this.socket = new WebSocket(`${this.url}?${qs.stringify(query)}`);
 
     setTimeout(() => {
