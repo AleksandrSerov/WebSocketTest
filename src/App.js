@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import SocketClient from "./service/socketClient";
+import SocketList from "./components/SocketList";
 
 import uuidv1 from "uuid/v1";
 import qs from "qs";
@@ -9,22 +10,29 @@ class App extends Component {
     super();
     this.client_id = uuidv1();
     this.url = "wss://test.devpizzasoft.ru/socket.io/";
+    this.socket = null;
   }
   // socket = new SocketClient();
   state = {
     url: "",
     token: "",
     room: "",
-    items: "",
-    sockets: "",
-    showList: true
+    data: [],
+    rooms: [],
+    connect: false
   };
   ping = () => {
     this.socket.send(JSON.stringify({ type: "ping", data: "ping" }));
   };
+
   join = room => {
+    const { rooms } = this.state;
     this.socket.send(JSON.stringify({ type: "join", room }));
+    this.setState({
+      rooms: [...rooms, room]
+    });
   };
+
   handleInput = event => {
     const { value, name } = event.target;
     this.setState({
@@ -32,7 +40,7 @@ class App extends Component {
     });
   };
 
-  handleSubmit = event => {
+  handleConnect = event => {
     event.preventDefault();
     const { token } = this.state;
 
@@ -46,50 +54,38 @@ class App extends Component {
 
     setTimeout(() => {
       this.ping();
-      this.join(this.state.room);
     }, 5000);
 
     this.socket.onmessage = request => {
+      const { data, rooms } = this.state;
       const message = JSON.parse(request.data);
-      if (message.room === this.state.room) {
+
+      if (rooms.includes(message.room)) {
         this.setState({
-          sockets: [...this.state.sockets, message]
+          data: [...data, { room: message.room, data: message.data }]
         });
+      }
+      if (message.pong) {
+        this.setState({
+          connect: true
+        });
+      }
+      if (message.error) {
+        alert("Error");
       }
     };
   };
 
-  renderItems = arr => {
-    const items = arr.map((item, i) => {
-      return <li key={i}>{JSON.stringify(item.data)}</li>;
-    });
-    return (
-      <>
-        <span className="roomName">Room: {arr[0].room}</span>
-        {items}
-      </>
-    );
-  };
-  showList = () => {
-    this.setState({
-      showList: !this.state.showList
-    });
+  handleJoin = event => {
+    event.preventDefault();
+    this.join(this.state.room);
   };
 
   render() {
-    const { sockets, showList } = this.state;
-    const items = sockets ? this.renderItems(sockets) : "";
-    const count = sockets.length;
+    const { data, rooms, connect } = this.state;
+    const status = connect ? "connect" : "disconnect";
+    const count = data.length;
 
-    const list = showList ? (
-      <ul onClick={this.showList} className="socketList list">
-        {items}
-      </ul>
-    ) : (
-      <ul onClick={this.showList} className="socketList list">
-        <span className="roomName">Room: {sockets[0].room}</span>
-      </ul>
-    );
     return (
       <div className="App">
         <h1>WebSocket App</h1>
@@ -101,18 +97,21 @@ class App extends Component {
 
               <label htmlFor="token">Token</label>
               <input onChange={this.handleInput} id="token" name="token" />
-
+              <button
+                type="submit"
+                onClick={this.handleConnect}
+                className={status}
+              >
+                Connect
+              </button>
               <label htmlFor="room">Room</label>
               <input onChange={this.handleInput} id="room" name="room" />
-
-              <button type="submit" onClick={this.handleSubmit}>
-                Add
-              </button>
             </form>
+            <button onClick={this.handleJoin}>Join Room</button>
           </div>
           <div className="socketList">
             <div className="socketList-counter">Count of sockets: {count}</div>
-            {list}
+            <SocketList data={data} rooms={rooms} />
           </div>
         </div>
       </div>
