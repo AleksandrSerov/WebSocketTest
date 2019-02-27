@@ -1,90 +1,86 @@
 import React, { Component } from "react";
 import "./App.css";
-import SocketClient from "./service/socketClient";
-import SocketList from "./components/SocketList";
-
-import uuidv1 from "uuid/v1";
-import qs from "qs";
+import SocketTable from "./containers/SocketTable";
 class App extends Component {
-  constructor() {
-    super();
-    this.client_id = uuidv1();
-    this.url = "wss://test.devpizzasoft.ru/socket.io/";
-    this.socket = null;
-  }
+  // constructor() {
+  //   super();
+  //   this.client_id = uuidv1();
+  //   this.url = "wss://test.devpizzasoft.ru/socket.io/";
+  //   this.socket = null;
+  // }
   // socket = new SocketClient();
-  state = {
-    url: "",
-    token: "",
-    room: "",
-    data: [],
-    rooms: [],
-    connect: false
-  };
-  
-  ping = () => {
-    this.socket.send(JSON.stringify({ type: "ping", data: "ping" }));
-  };
+  // state = {
+  //   url: "",
+  //   token: "",
+  //   room: "",
+  //   data: [],
+  //   rooms: [],
+  //   connect: false
+  // };
 
-  join = room => {
-    const { rooms } = this.state;
-    this.socket.send(JSON.stringify({ type: "join", room }));
-    this.setState({
-      rooms: [...rooms, room]
-    });
-  };
+  // ping = () => {
+  //   this.socket.send(JSON.stringify({ type: "ping", data: "ping" }));
+  // };
 
-  handleInput = event => {
-    const { value, name } = event.target;
-    this.setState({
-      [name]: value
-    });
-  };
+  // join = room => {
+  //   const { rooms } = this.state;
+  //   this.socket.send(JSON.stringify({ type: "join", room }));
+  //   this.setState({
+  //     rooms: [...rooms, room]
+  //   });
+  // };
 
-  handleConnect = event => {
-    event.preventDefault();
-    const { token } = this.state;
+  // handleInput = event => {
+  //   const { value, name } = event.target;
+  //   this.setState({
+  //     [name]: value
+  //   });
+  // };
 
-    const query = {
-      token,
-      client_id: this.client_id,
-      room: ""
-    };
-    this.socket = new WebSocket(`${this.url}?${qs.stringify(query)}`);
+  // handleConnect = event => {
+  //   event.preventDefault();
+  //   const { token } = this.state;
 
-    setTimeout(() => {
-      this.ping();
-    }, 5000);
+  //   const query = {
+  //     token,
+  //     client_id: this.client_id,
+  //     room: ""
+  //   };
+  //   this.socket = new WebSocket(`${this.url}?${qs.stringify(query)}`);
 
-    this.socket.onmessage = request => {
-      const { data, rooms } = this.state;
-      const message = JSON.parse(request.data);
+  //   setTimeout(() => {
+  //     this.ping();
+  //   }, 5000);
 
-      if (rooms.includes(message.room)) {
-        this.setState({
-          data: [...data, { room: message.room, data: message.data }]
-        });
-      }
-      if (message.pong) {
-        this.setState({
-          connect: true
-        });
-      }
-      if (message.error) {
-        alert("Error");
-      }
-    };
-  };
+  //   this.socket.onmessage = request => {
+  //     const { data, rooms } = this.state;
+  //     const message = JSON.parse(request.data);
 
-  handleJoin = event => {
-    event.preventDefault();
-    this.join(this.state.room);
-  };
+  //     if (rooms.includes(message.room)) {
+  //       this.setState({
+  //         data: [...data, { room: message.room, data: message.data }]
+  //       });
+  //     }
+  //     if (message.pong) {
+  //       this.setState({
+  //         connect: true
+  //       });
+  //     }
+  //     if (message.error) {
+  //       alert("Error");
+  //     }
+  //   };
+  // };
+
+  // handleJoin = event => {
+  //   event.preventDefault();
+  //   this.join(this.state.room);
+  // };
 
   render() {
-    const { data, rooms, connect } = this.state;
-    const status = connect ? "connect" : "disconnect";
-    const count = data.length;
+    // const { data, rooms, connect } = this.state;
+    // const status = connect ? "connect" : "disconnect";
+    // const count = data.length;
 
     return (
       <div className="App">
@@ -93,25 +89,19 @@ class App extends Component {
           <div className="content-form">
             <form action="#">
               <label htmlFor="url">URL</label>
-              <input onChange={this.handleInput} id="url" name="url" />
+              <input id="url" name="url" />
 
               <label htmlFor="token">Token</label>
-              <input onChange={this.handleInput} id="token" name="token" />
-              <button
-                type="submit"
-                onClick={this.handleConnect}
-                className={status}
-              >
-                Connect
-              </button>
+              <input id="token" name="token" />
+              <button type="submit">Connect</button>
               <label htmlFor="room">Room</label>
-              <input onChange={this.handleInput} id="room" name="room" />
+              <input id="room" name="room" />
             </form>
-            <button onClick={this.handleJoin}>Join Room</button>
+            <button>Join Room</button>
           </div>
           <div className="socketList">
-            <div className="socketList-counter">Count of sockets: {count}</div>
-            <SocketList data={data} rooms={rooms} />
+            <div className="socketList-counter">Count of sockets:</div>
+            <SocketTable />
           </div>
         </div>
       </div>

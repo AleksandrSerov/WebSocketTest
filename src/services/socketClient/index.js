@@ -1,8 +1,6 @@
 import uuidv1 from "uuid/v1";
 import qs from "qs";
 
-import { Component } from "react";
-
 const SOCKET_CONNECTING = 0;
 const SOCKET_OPEN = 1;
 const SOCKET_CLOSING = 2;
@@ -13,7 +11,7 @@ const PONG_WAIT_TIMEOUT = 5000;
 const SOCKET_RECONNECT_TIMEOUT = 5000;
 const SOCKET_SEND_TIMEOUT = 1000;
 
-export default class Socket extends Component {
+export default class Socket {
   static systemEvents = [
     "error",
     "open",
@@ -23,8 +21,7 @@ export default class Socket extends Component {
     "connect",
     "disconnect"
   ];
-  constructor() {
-    super();
+  constructor(url = null, query = {}) {
     this.socket = null;
     this.state = null;
     this.timer = null;
