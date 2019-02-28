@@ -3,6 +3,8 @@ import thunk from "redux-thunk";
 import rootReducer from "./reducers";
 
 const createReducer = asyncReducers => {
+  console.log(rootReducer);
+
   combineReducers({ ...rootReducer, ...asyncReducers });
 };
 

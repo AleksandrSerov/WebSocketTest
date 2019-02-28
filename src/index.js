@@ -5,9 +5,8 @@ import App from "./App";
 import getStore from "./store";
 import "./index.css";
 
-import * as reducers from "./store/reducers";
-
 const store = getStore();
+console.log(store);
 ReactDOM.render(
   <Provider store={store}>
     <App />

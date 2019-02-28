@@ -1,3 +1,1 @@
-import { createAction } from "redux-actions";
-
-export const setInitialState = createAction("INITIAL_STATE/SET");
+export const setInitialState = "INITIAL_STATE/SET";
