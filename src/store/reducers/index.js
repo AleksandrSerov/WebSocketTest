@@ -2,17 +2,31 @@ import { combineReducers } from "redux";
 import { handleActions } from "redux-actions";
 import actions from "../actions";
 
-const initialState = {
-  messages: [],
-  rooms: [],
-  ui: {}
-};
+export const messages = handleActions(
+  {
+    [actions.setInitialState](state, { payload }) {
+      return payload.messages;
+    }
+  },
+  []
+);
 
-export default function reduce(state = initialState, action = {}) {
-  switch (action.type) {
-    case actions.setInitialState:
-      return state;
-    default:
-      return state;
-  }
-}
+export const rooms = handleActions(
+  {
+    [actions.setInitialState](state, { payload }) {
+      return payload.rooms;
+    }
+  },
+  []
+);
+
+export const ui = handleActions(
+  {
+    [actions.setInitialState](state, { payload }) {
+      return payload.ui;
+    }
+  },
+  {}
+);
+
+export default combineReducers({ messages, rooms, ui });

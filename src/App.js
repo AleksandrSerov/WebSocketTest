@@ -9,14 +9,13 @@ class App extends Component {
   //   this.socket = null;
   // }
   // socket = new SocketClient();
-  // state = {
-  //   url: "",
-  //   token: "",
-  //   room: "",
-  //   data: [],
-  //   rooms: [],
-  //   connect: false
-  // };
+  state = {
+    url: "",
+    token: "",
+    room: "",
+    rooms: [],
+    connect: false
+  };
 
   // ping = () => {
   //   this.socket.send(JSON.stringify({ type: "ping", data: "ping" }));
@@ -30,12 +29,12 @@ class App extends Component {
   //   });
   // };
 
-  // handleInput = event => {
-  //   const { value, name } = event.target;
-  //   this.setState({
-  //     [name]: value
-  //   });
-  // };
+  handleInput = event => {
+    const { value, name } = event.target;
+    this.setState({
+      [name]: value
+    });
+  };
 
   // handleConnect = event => {
   //   event.preventDefault();
@@ -89,13 +88,12 @@ class App extends Component {
           <div className="content-form">
             <form action="#">
               <label htmlFor="url">URL</label>
-              <input id="url" name="url" />
-
+              <input id="url" name="url" onChange={this.handleInput} />
               <label htmlFor="token">Token</label>
-              <input id="token" name="token" />
+              <input id="token" name="token" onChange={this.handleInput} />
               <button type="submit">Connect</button>
               <label htmlFor="room">Room</label>
-              <input id="room" name="room" />
+              <input id="room" name="room" onChange={this.handleInput} />
             </form>
             <button>Join Room</button>
           </div>
