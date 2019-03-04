@@ -1,4 +1,4 @@
-import * as async from "./async";
-import * as sync from "./sync";
+import * as async from "../actions/async";
+import * as sync from "../actions/sync";
 
 export default { ...sync, ...async };

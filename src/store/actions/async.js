@@ -1,1 +1,1 @@
-export * from "./thunks/socketThunks";
+export * from "../actions/thunks/socketThunks";

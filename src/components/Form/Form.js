@@ -1,11 +1,9 @@
 import React, { Component } from "react";
 import SocketClient from "../../services/socketClient/SocketClient";
 import "./form.css";
+import actions from "../../store/actions";
 
 class Form extends Component {
-  constructor() {
-    super();
-  }
   state = {
     url: "",
     token: "",
@@ -22,11 +20,23 @@ class Form extends Component {
     const { token } = this.state;
 
     this.socket = new SocketClient();
+    this.socket
+      .on({
+        event: "open",
+        cb: actions.handleSocketOpen
+      })
+      .on({ event: "connect", cb: actions.setSocketConnected });
     this.socket.open(token);
   };
+
   handleJoinRoom = () => {
     const { room } = this.state;
-    this.socket.join(room);
+    this.socket.join("settings").on({
+      room: "settings",
+      cb: msg => {
+        actions.handleSettingsRoomsMessage(msg);
+      }
+    });
   };
 
   render() {

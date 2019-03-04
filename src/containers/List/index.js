@@ -1,42 +1,24 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
-export default class SocketList extends Component {
-  toggleList = event => {
-    const list = event.target.nextSibling;
-    if (list.style.display === "block") {
-      list.style.display = "none";
-    } else {
-      list.style.display = "block";
-    }
-  };
-  renderItems = arr => {
-    const { rooms } = this.props;
-    let lists = [];
-    for (let room of rooms) {
-      const items = arr.map((item, i) => {
-        if (item.room === room) {
-          return <li key={i}>{JSON.stringify(item.data)}</li>;
-        }
-        return;
-      });
-
-      lists = [...lists, { room, items }];
-    }
-    return lists.map((list, i) => {
-      return (
-        <>
-          <span className="roomName span" onClick={this.toggleList}>
-            Room {list.room}
-          </span>
-          <ul key={i}>{list.items} </ul>
-        </>
-      );
-    });
-  };
-
+class List extends Component {
   render() {
-    const { data } = this.props;
-    const items = data.length !== 0 ? this.renderItems(data) : "";
-    return <div className="list">{items}</div>;
+    return (
+      <div className="socketList">
+        <div className="socketList-counter">Count of sockets:</div>
+        <h2>Example</h2>
+        <h2>Messages: {this.props.messages}</h2>
+        <h2>CurrentRoom: {this.props.currentRoom}</h2>
+      </div>
+    );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    messages: state.messages,
+    currentRoom: state.ui.currentRoom
+  };
+};
+
+export default connect(mapStateToProps)(List);

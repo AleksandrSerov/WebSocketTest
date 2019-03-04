@@ -64,7 +64,12 @@ export default class SocketClient {
     this.socket.send(JSON.stringify({ type: "ping", data: "ping" }));
   };
 
-  fireEvent = ({ room, event, data }) => {
+  fireEvent = ({ room, event = "msg", data }) => {
+    console.log(`RoomFE ${room}`);
+    console.log(`EventFE ${event}`);
+    console.log(`DataFE `);
+    console.log(data);
+
     if (SocketClient.systemEvents.includes(event)) {
       // Если пришедшее событие есть в системных,
       // выполняет соответствующий обработчик для него
@@ -173,9 +178,10 @@ export default class SocketClient {
           type: "confirm",
           i: message.data.i
         });
+        console.log("FireEvent");
         this.fireEvent({
           room: message.room,
-          event: message.event || "msg",
+          event: "msg",
           data: message.data
         });
         clearTimeout(this.timer);
@@ -226,8 +232,10 @@ export default class SocketClient {
       this.events[room] = {
         msg: []
       };
+      console.log(`Join: ${room}`);
       this.send({ type: "join", room });
       this.fireEvent({
+        room,
         event: "join",
         data: {
           room
