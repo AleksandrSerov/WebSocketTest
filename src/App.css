@@ -6,44 +6,12 @@
 h1 {
   text-align: center;
 }
-.content-form {
-  border: 1px solid black;
-  border-radius: 4px;
-  width: 20%;
-  padding: 10px;
-  max-height: 415px;
-}
+
 .socketList {
   border: 1px solid black;
   border-radius: 4px;
   width: 70%;
   overflow: hidden;
-}
-
-.content-form form input {
-  display: block;
-  margin-bottom: 20px;
-  height: 30px;
-  font-size: 20px;
-  width: 100%;
-}
-
-.content-form form label {
-  font-size: 20px;
-}
-
-.content-form form button {
-  font-size: 16px;
-  font-weight: bold;
-}
-
-ul li {
-  list-style: decimal;
-}
-.roomName {
-  font-size: 20px;
-  font-weight: 700;
-  cursor: pointer;
 }
 
 .socketList .list {
@@ -56,36 +24,14 @@ ul li {
   padding: 10px;
 }
 
-.show {
-  display: block;
-}
-
-.hide {
-  display: none;
-}
-
-.connect {
-  background: #26972d;
-}
-
-.disconnect {
-  background: #ff7673;
-}
-
 @media (max-width: 1199px) {
   .content {
     flex-direction: column;
     align-items: center;
   }
-  .content-form {
-    width: 80%;
-    margin-bottom: 20px;
-  }
+
   .socketList {
     padding: 0;
     width: 80%;
-  }
-  .content-form form input {
-    width: 100%;
   }
 }

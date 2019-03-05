@@ -1,0 +1,17 @@
+.form {
+  border: 1px solid black;
+  border-radius: 4px;
+  width: 20%;
+  padding: 10px;
+  font-size: 20px;
+}
+.form-form-checkbox {
+  display: block;
+}
+
+@media (max-width: 1199px) {
+  .form {
+    width: 80%;
+    margin-bottom: 20px;
+  }
+}
