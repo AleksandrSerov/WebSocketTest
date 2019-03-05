@@ -9,8 +9,14 @@ export const handleSocketOpen = data => (dispatch, getState) => {
   }
 };
 
-export const handleSettingsRoomsMessage = data => {
-  console.log({...data});
-  // const { messages, rooms, ui } = getState();
-  // console.log({ messages, rooms, ui });
+export const handleSettingsRoomsMessage = data => async dispatch => {
+  dispatch(actions.updateSettingsMessages(data));
+};
+
+export const handleOrdersMessage = data => async dispatch => {
+  dispatch(actions.updateOrdersMessages(data));
+};
+
+export const handleOrderRoomMessage = data => async dispatch => {
+  dispatch(actions.updateOrderRoomMessage(data));
 };

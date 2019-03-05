@@ -65,11 +65,6 @@ export default class SocketClient {
   };
 
   fireEvent = ({ room, event = "msg", data }) => {
-    console.log(`RoomFE ${room}`);
-    console.log(`EventFE ${event}`);
-    console.log(`DataFE `);
-    console.log(data);
-
     if (SocketClient.systemEvents.includes(event)) {
       // Если пришедшее событие есть в системных,
       // выполняет соответствующий обработчик для него

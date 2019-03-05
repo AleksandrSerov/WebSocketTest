@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import SocketClient from "../../services/socketClient/SocketClient";
 import "./form.css";
 import actions from "../../store/actions";
-
+import { connect } from "react-redux";
+import { Button, Input } from "reactstrap";
 class Form extends Component {
   state = {
     url: "",
@@ -30,13 +31,44 @@ class Form extends Component {
   };
 
   handleJoinRoom = () => {
+    const { dispatch, rooms } = this.props;
     const { room } = this.state;
-    this.socket.join("settings").on({
-      room: "settings",
-      cb: msg => {
-        actions.handleSettingsRoomsMessage(msg);
-      }
-    });
+    dispatch(actions.setCurrentRoom(room));
+    if (!rooms.includes(room)) {
+      dispatch(actions.updateRooms(room));
+    }
+    const districtNum = /order.district_/.test(room)
+      ? room.replace(/\D/gi, "")
+      : null;
+    switch (room) {
+      case "settings":
+        this.socket.join("settings").on({
+          room: "settings",
+          cb: msg => {
+            dispatch(actions.handleSettingsRoomsMessage(msg));
+          }
+        });
+        break;
+      case "order":
+        this.socket.join("order").on({
+          room: "order",
+          cb: msg => {
+            dispatch(actions.handleOrderRoomMessage(msg));
+          }
+        });
+        break;
+      case `order.district_${districtNum}`:
+        this.socket.join(`order.district_${districtNum}`).on({
+          room: `order.district_${districtNum}`,
+          cb: msg => {
+            dispatch(actions.handleOrdersMessage(msg));
+          }
+        });
+        break;
+
+      default:
+        break;
+    }
   };
 
   render() {
@@ -44,19 +76,29 @@ class Form extends Component {
       <div className="content-form">
         <form action="#">
           <label htmlFor="url">URL</label>
-          <input id="url" name="url" onChange={this.handleInput} />
+          <Input id="url" name="url" onChange={this.handleInput} />
           <label htmlFor="token">Token</label>
-          <input id="token" name="token" onChange={this.handleInput} />
-          <button type="submit" onClick={this.handleConnect}>
-            Connect
-          </button>
-          <label htmlFor="room">Room</label>
-          <input id="room" name="room" onChange={this.handleInput} />
+          <Input id="token" name="token" onChange={this.handleInput} />
+          <Button onClick={this.handleConnect}>Connect</Button>
+          <div>
+            <label htmlFor="room">Room</label>
+            <Input id="room" name="room" onChange={this.handleInput} />
+            <Button onClick={this.handleJoinRoom}>Join Room</Button>
+          </div>
         </form>
-        <button onClick={this.handleJoinRoom}>Join Room</button>
       </div>
     );
   }
 }
 
-export default Form;
+const mapStateToProps = state => {
+  return {
+    rooms: state.rooms
+  };
+};
+
+const mapDispatchtoProps = dispatch => ({ dispatch });
+export default connect(
+  mapStateToProps,
+  mapDispatchtoProps
+)(Form);

@@ -16,17 +16,13 @@ h1 {
 .socketList {
   border: 1px solid black;
   border-radius: 4px;
-
   width: 70%;
   overflow: hidden;
 }
-.socketList span {
-  display: block;
-}
+
 .content-form form input {
   display: block;
-  margin-bottom: 30px;
-  margin-top: 10px;
+  margin-bottom: 20px;
   height: 30px;
   font-size: 20px;
   width: 100%;
@@ -36,15 +32,9 @@ h1 {
   font-size: 20px;
 }
 
-button {
-  display: block;
-  cursor: pointer;
-  font-size: 20px;
-  padding: 10px 40px;
-  margin-bottom: 20px;
-  border-radius: 10px;
-  border: none;
-  outline: none;
+.content-form form button {
+  font-size: 16px;
+  font-weight: bold;
 }
 
 ul li {

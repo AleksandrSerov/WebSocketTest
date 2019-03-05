@@ -1,0 +1,7 @@
+.append {
+  height: 20px;
+  overflow: hidden;
+}
+th {
+  cursor: pointer;
+}
