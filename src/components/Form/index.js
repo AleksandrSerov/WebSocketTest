@@ -2,11 +2,10 @@ import React, { Component } from "react";
 import SocketClient from "../../services/socketClient/SocketClient";
 import actions from "../../store/actions";
 import { connect } from "react-redux";
-import { Button, Input, FormGroup, Label } from "reactstrap";
+import { Button, Input, Label } from "reactstrap";
 import "./Form.css";
 class Form extends Component {
   state = {
-    // url: "",
     token: "",
     selectedRooms: [],
     districtId: ""
@@ -33,14 +32,7 @@ class Form extends Component {
   handleConnect = event => {
     event.preventDefault();
     const { token } = this.state;
-
     this.socket = new SocketClient();
-    this.socket
-      .on({
-        event: "open",
-        cb: actions.handleSocketOpen
-      })
-      .on({ event: "connect", cb: actions.setSocketConnected });
     this.socket.open(token);
   };
 
@@ -48,7 +40,7 @@ class Form extends Component {
     const { dispatch, rooms } = this.props;
     const { selectedRooms, districtId } = this.state;
     selectedRooms.forEach(selectedRoom => {
-      selectedRoom = /order.district/.test(selectedRoom)
+      selectedRoom = /\./.test(selectedRoom)
         ? selectedRoom + `_${districtId}`
         : selectedRoom;
       if (!rooms.includes(selectedRoom)) {
@@ -64,6 +56,7 @@ class Form extends Component {
             }
           });
           break;
+
         case "order":
           this.socket.join("order").on({
             room: "order",
@@ -82,12 +75,31 @@ class Form extends Component {
           });
           break;
 
+        case "logon":
+          this.socket.join("logon").on({
+            room: "logon",
+            cb: msg => {
+              dispatch(actions.handleLogonRoomMessage(msg));
+            }
+          });
+          break;
+
         case `order.district_${districtId}`:
           console.log(`order.district_${districtId}`);
           this.socket.join(`order.district_${districtId}`).on({
             room: `order.district_${districtId}`,
             cb: msg => {
               dispatch(actions.handleOrdersMessage(msg));
+            }
+          });
+          break;
+
+        case `courier.district_${districtId}`:
+          console.log(`courier.district_${districtId}`);
+          this.socket.join(`courier.district_${districtId}`).on({
+            room: `courier.district_${districtId}`,
+            cb: msg => {
+              dispatch(actions.handleCouriersRoomMessage(msg));
             }
           });
           break;
@@ -103,8 +115,6 @@ class Form extends Component {
     return (
       <div className="form">
         <form action="#" className="form-form">
-          {/* <label htmlFor="url">URL</label> */}
-          {/* <Input id="url" name="url" onChange={this.handleInput} /> */}
           <label htmlFor="token">Token</label>
           <Input
             className="form-form-input"
@@ -146,11 +156,8 @@ class Form extends Component {
               <option defaultValue="order.district" value="order.district">
                 order.district{" "}
               </option>
-              <option
-                defaultValue="couriers.district"
-                value="couriers.district"
-              >
-                couriers.district{" "}
+              <option defaultValue="courier.district" value="courier.district">
+                courier.district{" "}
               </option>
               <option defaultValue="cheque.district" value="cheque.district">
                 cheque.district{" "}

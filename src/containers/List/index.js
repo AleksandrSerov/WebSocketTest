@@ -11,16 +11,18 @@ class List extends Component {
     return arr.map((item, i) => {
       const time = moment(item.timestamp * 1000).format("HH:mm:ss");
       JSON.stringify(item.data);
-      const currentItem = JSON.stringify(item.data) ? (
+      const currentItem = (
         <tr key={i}>
           <th>{time}</th>
           <th>
             <div onClick={this.toggleShowItem} className="show">
+              {JSON.stringify(item.room)}
               {JSON.stringify(item.data)}
             </div>
           </th>
         </tr>
-      ) : null;
+      );
+
       return currentItem;
     });
   };

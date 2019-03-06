@@ -13,3 +13,7 @@ export const updateRooms = createAction("ROOMS/UPDATE");
 export const setCurrentRoom = createAction("CURRENT_ROOM/SET");
 export const updateOrderRoomMessage = createAction("ORDER_ROOM_MESSAGE/UPDATE");
 export const updateMessageRoomMessage = createAction("MESSAGE_ROOM/UPDATE");
+export const updateLogonRoomMessage = createAction("MESSAGE_LOGON/UPDATE");
+export const updateCouriersRoomMessage = createAction(
+  "MESSAGE_COURIERS/UPDATE"
+);

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import List from "./containers/List/";
-import Form from "./components/Form/Form";
+import Form from "./components/Form/";
 
 class App extends Component {
   render() {

@@ -22,5 +22,13 @@ export const handleOrderRoomMessage = data => async dispatch => {
 };
 
 export const handleMessageRoomMessage = data => async dispatch => {
-  dispatch(actions.updateOrderRoomMessage(data));
+  dispatch(actions.updateMessageRoomMessage(data));
+};
+
+export const handleLogonRoomMessage = data => async dispatch => {
+  dispatch(actions.updateLogonRoomMessage(data));
+};
+
+export const handleCouriersRoomMessage = data => async dispatch => {
+  dispatch(actions.updateCouriersRoomMessage(data));
 };

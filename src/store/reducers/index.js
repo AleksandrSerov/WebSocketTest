@@ -8,6 +8,8 @@ export const messages = handleActions(
       return payload.messages;
     },
     [actions.updateSettingsMessages](state, { payload }) {
+      console.log("updateSettingsRoomMessage: ", payload);
+
       const message = {
         room: "settings",
         data: payload.settings,
@@ -15,18 +17,55 @@ export const messages = handleActions(
       };
       return [...state, message];
     },
-    [actions.updateOrdersMessages](state, { payload }) {
+    [actions.updateOrderRoomMessage](state, { payload }) {
+      console.log("updateOrderRoomMessage: ", payload);
       const message = {
-        room: payload.room,
+        room: "order",
+        data:
+          payload.districts ||
+          payload.categories ||
+          payload.routes ||
+          payload.couriers,
+        timestamp: payload.timestamp
+      };
+      return [...state, message];
+    },
+    [actions.updateMessageRoomMessage](state, { payload }) {
+      console.log("updateMessageRoomMessage: ", payload);
+
+      const message = {
+        room: "message",
+        data: payload.message,
+        timestamp: payload.timestamp
+      };
+      return [...state, message];
+    },
+    [actions.updateLogonRoomMessage](state, { payload }) {
+      console.log("updateMessageRoomMessage: ", payload);
+
+      const message = {
+        room: "logon",
+        data: payload.act,
+        timestamp: payload.timestamp
+      };
+      return [...state, message];
+    },
+    [actions.updateOrdersMessages](state, { payload }) {
+      console.log("updateOrdersMessage: ", payload);
+
+      const message = {
+        room: "orders",
         data: payload.orders,
         timestamp: payload.timestamp
       };
       return [...state, message];
     },
-    [actions.updateOrderRoomMessage](state, { payload }) {
+    [actions.updateCouriersRoomMessage](state, { payload }) {
+      console.log("updateCouriersRoomMessage: ", payload);
+
       const message = {
-        room: "order",
-        data: payload.order,
+        room: "couriers",
+        data: payload,
         timestamp: payload.timestamp
       };
       return [...state, message];
