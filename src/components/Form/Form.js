@@ -3,7 +3,7 @@ import SocketClient from "../../services/socketClient/SocketClient";
 import actions from "../../store/actions";
 import { connect } from "react-redux";
 import { Button, Input, FormGroup, Label } from "reactstrap";
-import "./form.css";
+import "./Form.css";
 class Form extends Component {
   state = {
     // url: "",
@@ -73,6 +73,7 @@ class Form extends Component {
           });
           break;
         case `order.district_${districtId}`:
+          console.log(`order.district_${districtId}`);
           this.socket.join(`order.district_${districtId}`).on({
             room: `order.district_${districtId}`,
             cb: msg => {
@@ -95,13 +96,19 @@ class Form extends Component {
           {/* <label htmlFor="url">URL</label> */}
           {/* <Input id="url" name="url" onChange={this.handleInput} /> */}
           <label htmlFor="token">Token</label>
-          <Input id="token" name="token" onChange={this.handleInput} />
+          <Input
+            className="form-form-input"
+            id="token"
+            name="token"
+            onChange={this.handleInput}
+          />
           <Button onClick={this.handleConnect}>Connect</Button>
           <div>
             <Label for="districtId">District ID</Label>
             <Input
               id="districtId"
               name="districtId"
+              className="form-form-input"
               onChange={this.handleInput}
             />
           </div>

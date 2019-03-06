@@ -5,8 +5,17 @@
   padding: 10px;
   font-size: 20px;
 }
+.form-form-input {
+    margin-bottom: 10px;
+}
 .form-form-checkbox {
   display: block;
+  margin-bottom: 10px;
+}
+.form-form-checkbox input {
+    width: 17px;
+    height: 17px;
+    
 }
 
 @media (max-width: 1199px) {
