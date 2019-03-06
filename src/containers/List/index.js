@@ -10,8 +10,8 @@ class List extends Component {
   renderItems = arr => {
     return arr.map((item, i) => {
       const time = moment(item.timestamp * 1000).format("HH:mm:ss");
-      console.log(time);
-      return (
+      JSON.stringify(item.data);
+      const currentItem = JSON.stringify(item.data) ? (
         <tr key={i}>
           <th>{time}</th>
           <th>
@@ -20,7 +20,8 @@ class List extends Component {
             </div>
           </th>
         </tr>
-      );
+      ) : null;
+      return currentItem;
     });
   };
   render() {

@@ -1,0 +1,28 @@
+.form {
+  border: 1px solid black;
+  border-radius: 4px;
+  width: 20%;
+  padding: 10px;
+  font-size: 20px;
+}
+.form-form-input {
+  margin-bottom: 10px;
+}
+.form-form-rooms {
+  display: block;
+  margin-bottom: 10px;
+}
+.form-form-rooms-select {
+  height: 200px;
+}
+.form-form-checkbox input {
+  width: 17px;
+  height: 17px;
+}
+
+@media (max-width: 1199px) {
+  .form {
+    width: 80%;
+    margin-bottom: 20px;
+  }
+}

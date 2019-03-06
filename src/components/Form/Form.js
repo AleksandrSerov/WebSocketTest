@@ -19,14 +19,14 @@ class Form extends Component {
   };
 
   handleAddRooms = event => {
-    const { checked, name } = event.target;
-    const { selectedRooms } = this.state;
-    const update = checked
-      ? [...selectedRooms, name]
-      : selectedRooms.filter(item => item !== name);
-    console.log(update);
+    const selectedRooms = Array.from(event.target.options).reduce(
+      (acc, item) => {
+        return item.selected ? [...acc, item.value] : acc;
+      },
+      []
+    );
     this.setState({
-      selectedRooms: update
+      selectedRooms
     });
   };
 
@@ -72,6 +72,16 @@ class Form extends Component {
             }
           });
           break;
+
+        case "message":
+          this.socket.join("message").on({
+            room: "message",
+            cb: msg => {
+              dispatch(actions.handleMessageRoomMessage(msg));
+            }
+          });
+          break;
+
         case `order.district_${districtId}`:
           console.log(`order.district_${districtId}`);
           this.socket.join(`order.district_${districtId}`).on({
@@ -112,99 +122,43 @@ class Form extends Component {
               onChange={this.handleInput}
             />
           </div>
-          <div className="form-form-checkbox">
-            <Label>Rooms</Label>
-            <FormGroup check>
-              <div className="form-form-checkbox-item">
-                <Input
-                  type="checkbox"
-                  name="logon"
-                  id="logon"
-                  onChange={this.handleAddRooms}
-                />
-                <Label for="logon" check>
-                  logon
-                </Label>
-              </div>
-
-              <div className="form-form-checkbox-item">
-                <Input
-                  type="checkbox"
-                  name="message"
-                  id="message"
-                  onChange={this.handleAddRooms}
-                />
-                <Label for="message" check onChange={this.handleInput}>
-                  message
-                </Label>
-              </div>
-              <div className="form-form-checkbox-item">
-                <Input
-                  type="checkbox"
-                  name="order"
-                  id="order"
-                  onChange={this.handleAddRooms}
-                />
-                <Label for="order" check>
-                  order
-                </Label>
-              </div>
-              <div className="form-form-checkbox-item">
-                <Input
-                  type="checkbox"
-                  name="settings"
-                  id="settings"
-                  onChange={this.handleAddRooms}
-                />
-                <Label for="settings" check>
-                  settings
-                </Label>
-              </div>
-              <div className="form-form-checkbox-item">
-                <Input
-                  type="checkbox"
-                  name="order.district"
-                  id="order.district"
-                  onChange={this.handleAddRooms}
-                />
-                <Label for="order.district" check>
-                  order.district_
-                </Label>
-              </div>
-              <div className="form-form-checkbox-item">
-                <Input
-                  type="checkbox"
-                  name="couriers.district"
-                  id="couriers.district"
-                  onChange={this.handleAddRooms}
-                />
-                <Label for="couriers.district" check>
-                  couriers.district_
-                </Label>
-              </div>
-              <div className="form-form-checkbox-item">
-                <Input
-                  type="checkbox"
-                  name="route.district"
-                  id="route.district"
-                  onChange={this.handleAddRooms}
-                />
-                <Label for="route.district" check>
-                  route.district_
-                </Label>
-              </div>
-              <div className="form-form-checkbox-item">
-                <Input
-                  type="checkbox"
-                  name="cheque.district"
-                  id="cheque.district"
-                  onChange={this.handleAddRooms}
-                />
-                <Label for="cheque.district" check>
-                  cheque.district_
-                </Label>
-              </div>
-            </FormGroup>
+          <div className="form-form-rooms">
+            <div>Rooms</div>
+            <select
+              name="rooms"
+              multiple="multiple"
+              size="11"
+              onChange={this.handleAddRooms}
+              className="form-form-rooms-select"
+            >
+              <option defaultValue="logon" value="logon">
+                logon{" "}
+              </option>
+              <option defaultValue="message" value="message">
+                message{" "}
+              </option>
+              <option defaultValue="order" value="order">
+                order{" "}
+              </option>
+              <option defaultValue="settings" value="settings">
+                settings{" "}
+              </option>
+              <option defaultValue="order.district" value="order.district">
+                order.district{" "}
+              </option>
+              <option
+                defaultValue="couriers.district"
+                value="couriers.district"
+              >
+                couriers.district{" "}
+              </option>
+              <option defaultValue="cheque.district" value="cheque.district">
+                cheque.district{" "}
+              </option>
+              <option defaultValue="route.district" value="route.district">
+                route.district{" "}
+              </option>
+            </select>
           </div>
           <Button onClick={this.handleJoinRoom}>Join Rooms</Button>
         </form>

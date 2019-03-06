@@ -20,3 +20,7 @@ export const handleOrdersMessage = data => async dispatch => {
 export const handleOrderRoomMessage = data => async dispatch => {
   dispatch(actions.updateOrderRoomMessage(data));
 };
+
+export const handleMessageRoomMessage = data => async dispatch => {
+  dispatch(actions.updateOrderRoomMessage(data));
+};
