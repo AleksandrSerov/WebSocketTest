@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "bootstrap": "^4.3.1",
+    "json-formatter-js": "^2.2.1",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-scripts": "2.1.5",
@@ -27,7 +28,9 @@
   "devDependencies": {
     "install": "^0.12.2",
     "moment": "^2.24.0",
+    "prettyjson": "^1.2.1",
     "qs": "^6.6.0",
+    "react-json-pretty": "^2.0.0",
     "react-redux": "^6.0.1",
     "redux": "^4.0.1",
     "redux-actions": "^2.6.4",

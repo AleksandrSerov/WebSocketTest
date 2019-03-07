@@ -2,22 +2,24 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Table } from "reactstrap";
 import * as moment from "moment";
+import JSONPretty from "react-json-pretty";
+
 import "./List.css";
 class List extends Component {
   toggleShowItem = event => {
     event.target.classList.toggle("append");
   };
+
   renderItems = arr => {
     return arr.map((item, i) => {
       const time = moment(item.timestamp * 1000).format("HH:mm:ss");
-      JSON.stringify(item.data);
+
       const currentItem = (
         <tr key={i}>
           <th>{time}</th>
           <th>
-            <div onClick={this.toggleShowItem} className="show">
-              {JSON.stringify(item.room)}
-              {JSON.stringify(item.data)}
+            <div className="show" onClick={this.toggleShowItem}>
+              <JSONPretty id="json-pretty" data={item.data} />
             </div>
           </th>
         </tr>
