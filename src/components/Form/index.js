@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import SocketClient from "../../services/socketClient/SocketClient";
 import actions from "../../store/actions";
+import joinCommonRooms from "../../socket/joinRooms/joinCommonRooms";
 import { connect } from "react-redux";
 import { Button, Input, Label } from "reactstrap";
 import "./Form.css";
@@ -56,44 +57,9 @@ class Form extends Component {
       if (!rooms.includes(selectedRoom)) {
         dispatch(actions.updateRooms(selectedRoom));
       }
+      joinCommonRooms(this.socket, selectedRoom, actions, dispatch);
 
       switch (selectedRoom) {
-        case "settings":
-          this.socket.join("settings").on({
-            room: "settings",
-            cb: msg => {
-              dispatch(actions.handleSettingsRoomsMessage(msg));
-            }
-          });
-          break;
-
-        case "order":
-          this.socket.join("order").on({
-            room: "order",
-            cb: msg => {
-              dispatch(actions.handleOrderRoomMessage(msg));
-            }
-          });
-          break;
-
-        case "message":
-          this.socket.join("message").on({
-            room: "message",
-            cb: msg => {
-              dispatch(actions.handleMessageRoomMessage(msg));
-            }
-          });
-          break;
-
-        case "logon":
-          this.socket.join("logon").on({
-            room: "logon",
-            cb: msg => {
-              dispatch(actions.handleLogonRoomMessage(msg));
-            }
-          });
-          break;
-
         case `order.district_${districtId}`:
           this.socket.leave(`order.district_${prevDistrictId}`);
           dispatch(actions.leaveRoom(`order.district_${prevDistrictId}`));
