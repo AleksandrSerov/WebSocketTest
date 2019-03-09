@@ -1,5 +1,5 @@
 import { createAction } from "redux-actions";
-
+//Initial state
 export const setInitialState = createAction("INITIAL_STATE/SET");
 
 export const fetchRequest = createAction("FETCH/REQUEST");
@@ -17,3 +17,6 @@ export const updateLogonRoomMessage = createAction("MESSAGE_LOGON/UPDATE");
 export const updateCouriersRoomMessage = createAction(
   "MESSAGE_COURIERS/UPDATE"
 );
+
+// Leave Rooms
+export const leaveRoom = createAction("ROOM/LEAVE");

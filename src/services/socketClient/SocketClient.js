@@ -255,4 +255,30 @@ export default class SocketClient {
     }
     return this;
   };
+
+  leave = room => {
+    if (this.rooms.includes(room) && this.roomsCount[room] === 1) {
+      // Если комната есть в списке и у нее только 1 джоин,
+      // удаляет комнату из списка и удаляет обработчики событий для комнаты
+      this.rooms = this.rooms.filter(name => name !== room);
+      delete this.events[room];
+      // Отправляет сообщение на сервер с типом leave
+      this.send({
+        type: "leave",
+        room
+      });
+      // Выполняет обработчики системного события leave
+      this.fireEvent({
+        event: "leave",
+        data: {
+          room
+        }
+      });
+    } else if (this.roomsCount[room] && this.roomsCount[room] > 1) {
+      // Если количество джоинов больше 1,
+      // уменьшает счетчик на 1
+      this.roomsCount[room] -= 1;
+    }
+    return this;
+  };
 }

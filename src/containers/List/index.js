@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Table } from "reactstrap";
 import * as moment from "moment";
 import JSONPretty from "react-json-pretty";
+import actions from "../../store/actions";
 
 import "./List.css";
 class List extends Component {

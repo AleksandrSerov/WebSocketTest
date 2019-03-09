@@ -81,6 +81,15 @@ export const rooms = handleActions(
     },
     [actions.updateRooms](state, { payload }) {
       return [...state, payload];
+    },
+    [actions.leaveRoom](state, { payload }) {
+      const rooms = state.reduce((acc, item) => {
+        if (item !== payload) {
+          return [...acc, item];
+        }
+        return acc;
+      }, []);
+      return rooms;
     }
   },
   []

@@ -30,7 +30,6 @@ class Form extends Component {
   };
 
   handleConnect = event => {
-    event.preventDefault();
     const { token } = this.state;
     this.socket = new SocketClient();
     this.socket.open(token);
@@ -39,6 +38,17 @@ class Form extends Component {
   handleJoinRoom = () => {
     const { dispatch, rooms } = this.props;
     const { selectedRooms, districtId } = this.state;
+
+    const roomWitchPrevId = rooms.find(item => {
+      return /_/.test(item);
+    });
+    const prevDistrictId = roomWitchPrevId
+      ? roomWitchPrevId.slice(
+          roomWitchPrevId.indexOf("_") + 1,
+          roomWitchPrevId.length
+        )
+      : undefined;
+
     selectedRooms.forEach(selectedRoom => {
       selectedRoom = /\./.test(selectedRoom)
         ? selectedRoom + `_${districtId}`
@@ -85,7 +95,8 @@ class Form extends Component {
           break;
 
         case `order.district_${districtId}`:
-          console.log(`order.district_${districtId}`);
+          this.socket.leave(`order.district_${prevDistrictId}`);
+          dispatch(actions.leaveRoom(`order.district_${prevDistrictId}`));
           this.socket.join(`order.district_${districtId}`).on({
             room: `order.district_${districtId}`,
             cb: msg => {
@@ -95,7 +106,7 @@ class Form extends Component {
           break;
 
         case `courier.district_${districtId}`:
-          console.log(`courier.district_${districtId}`);
+          this.socket.leave(`courier.district_${prevDistrictId}`);
           this.socket.join(`courier.district_${districtId}`).on({
             room: `courier.district_${districtId}`,
             cb: msg => {
