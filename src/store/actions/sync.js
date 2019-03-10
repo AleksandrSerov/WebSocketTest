@@ -2,10 +2,6 @@ import { createAction } from "redux-actions";
 //Initial state
 export const setInitialState = createAction("INITIAL_STATE/SET");
 
-export const fetchRequest = createAction("FETCH/REQUEST");
-export const fetchSuccess = createAction("FETCH/SUCCESS");
-export const fetchFailure = createAction("FETCH/FAILURE");
-
 //Update messages
 export const updateSettingsMessages = createAction("SETTINGS_MESSAGE/UPDATE");
 export const updateOrdersMessages = createAction("ORDERS_MESSAGE/UPDATE");

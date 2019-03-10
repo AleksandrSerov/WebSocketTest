@@ -20,7 +20,11 @@ class List extends Component {
           <th>{time}</th>
           <th>
             <div className="show" onClick={this.toggleShowItem}>
-              <JSONPretty id="json-pretty" data={item.data} />
+              <JSONPretty
+                id="json-pretty"
+                data={item.data}
+                onClick={this.toggleShowItems}
+              />
             </div>
           </th>
         </tr>
