@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import SocketClient from "../../services/socketClient/SocketClient";
 import actions from "../../store/actions";
 import joinCommonRooms from "../../socket/joinRooms/joinCommonRooms";
+import joinDistrictRooms from "../../socket/joinRooms/joinDistrictRooms";
 import { connect } from "react-redux";
 import { Button, Input, Label } from "reactstrap";
 import "./Form.css";
@@ -30,7 +31,7 @@ class Form extends Component {
     });
   };
 
-  handleConnect = event => {
+  handleConnect = () => {
     const { token } = this.state;
     this.socket = new SocketClient();
     this.socket.open(token);
@@ -58,32 +59,14 @@ class Form extends Component {
         dispatch(actions.updateRooms(selectedRoom));
       }
       joinCommonRooms(this.socket, selectedRoom, actions, dispatch);
-
-      switch (selectedRoom) {
-        case `order.district_${districtId}`:
-          this.socket.leave(`order.district_${prevDistrictId}`);
-          dispatch(actions.leaveRoom(`order.district_${prevDistrictId}`));
-          this.socket.join(`order.district_${districtId}`).on({
-            room: `order.district_${districtId}`,
-            cb: msg => {
-              dispatch(actions.handleOrdersMessage(msg));
-            }
-          });
-          break;
-
-        case `courier.district_${districtId}`:
-          this.socket.leave(`courier.district_${prevDistrictId}`);
-          this.socket.join(`courier.district_${districtId}`).on({
-            room: `courier.district_${districtId}`,
-            cb: msg => {
-              dispatch(actions.handleCouriersRoomMessage(msg));
-            }
-          });
-          break;
-
-        default:
-          break;
-      }
+      joinDistrictRooms(
+        this.socket,
+        selectedRoom,
+        actions,
+        dispatch,
+        districtId,
+        prevDistrictId
+      );
     });
     dispatch(actions.setCurrentRoom(selectedRooms[0]));
   };
